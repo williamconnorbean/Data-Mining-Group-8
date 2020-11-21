@@ -6,7 +6,7 @@ class HelpersTests(unittest.TestCase):
         fileName = "helpers/test.csv"
         transactions = helpers.preprocess(fileName)
         
-        result = [
+        expected = [
             ['9/9/2020 12:00','Region of Waterloo, Public Health','50-59','Female','Close Contact','Recovered','Ontario'],
             ['11/4/2020 12:00','Peel Public Health','20-29','Female','Close Contact','Active','Ontario'],
             ['10/25/2020 12:00','Peel Public Health','40-49','Male','Close Contact','Recovered','Ontario'],
@@ -15,4 +15,4 @@ class HelpersTests(unittest.TestCase):
         ]
 
         self.assertEqual(len(transactions), 5)
-        self.assertEqual(transactions, result)
+        self.assertEqual(transactions, expected)
