@@ -3,7 +3,7 @@ import helpers
 
 class HelpersTests(unittest.TestCase):
     def testPreprocess(self):        
-        fileName = "test.csv"
+        fileName = "helpers/test.csv"
         transactions = helpers.preprocess(fileName)
         
         result = [
@@ -16,7 +16,3 @@ class HelpersTests(unittest.TestCase):
 
         self.assertEqual(len(transactions), 5)
         self.assertEqual(transactions, result)
-
-
-if __name__ == '__main__':
-    unittest.main()
