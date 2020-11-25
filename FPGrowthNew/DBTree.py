@@ -1,4 +1,5 @@
 # encoding: utf-8
+from collections import defaultdict
 
 class DBTree(object):
     def __init__(self):
@@ -7,10 +8,6 @@ class DBTree(object):
     @property
     def root(self):
         return self._root
-
-    def buildTree(self, tdb):
-        for transaction in tdb:
-            self.add(transaction)
     
     def add(self, dbTransaction):
         currNode = self._root
@@ -25,6 +22,22 @@ class DBTree(object):
                 currNode.add(nextNode)
             
             currNode = nextNode
+
+    def getSupportCount(self):
+        result = defaultdict(lambda: 0)
+        queue = []
+        queue.append(self.root)
+
+        while len(queue) != 0:
+            node = queue.pop(0)
+
+            if not node.item is None:
+                result[node.item] += node.count
+
+            for child in node.children:
+                queue.append(node.children[child])
+        
+        return result
 
 class DBNode(object):
     def __init__(self, item, count=1):
