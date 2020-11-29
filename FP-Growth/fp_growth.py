@@ -10,13 +10,14 @@ Basic usage of the module is very simple:
 """
 
 from collections import defaultdict, namedtuple
+import csv
 
 __author__ = "Eric Naeseth <eric@naeseth.com>"
 __copyright__ = "Copyright © 2009 Eric Naeseth"
 __license__ = "MIT License"
 
 
-def find_frequent_itemsets(transactions, minimum_support, include_support=False):
+def find_frequent_itemsets(transactions, minimum_support, tdbFile="", useTwoScans=False, include_support=False):
     """
     Find frequent itemsets in the given transactions using FP-growth. This
     function returns a generator instead of an eagerly-populated list of items.
@@ -39,9 +40,15 @@ def find_frequent_itemsets(transactions, minimum_support, include_support=False)
 
     # Load the passed-in transactions and count the support that individual
     # items have.
-    for transaction in transactions:
-        for item in transaction:
-            items[item] += 1
+    if useTwoScans and tdbFile != "":
+        with open(tdbFile) as database:
+            for row in csv.reader(database):
+                for item in row:
+                    items[item] += 1
+    else:
+        for transaction in transactions:
+            for item in transaction:
+                items[item] += 1
 
     # Remove infrequent items from the item support dictionary.
     items = dict(
