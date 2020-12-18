@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.getcwd()))+'/FP-Growth')
+
 from fp_growth import find_frequent_itemsets
 import csv
 import datetime
@@ -9,7 +13,7 @@ for i in range(NUM_MONTH + 1):
     transactions_monthly = []
     transactions.append(transactions_monthly)
 
-with open("../data/canada-covid-details-reduced.csv") as database:
+with open("../../data/canada-covid-details-reduced.csv") as database:
     for row in csv.reader(database):
         date_time_str = row[0]
         date_time_obj = datetime.datetime.strptime(date_time_str, '%Y/%m/%d %H:%M:%S')
@@ -18,7 +22,10 @@ with open("../data/canada-covid-details-reduced.csv") as database:
 
 minsup = 2
 for i in range(NUM_MONTH + 1):
-    print("\n\nMonth #{}:".format(i+1))
+    if i == 12:
+        print("\n\nEntire time range:")
+    else:
+        print("\n\nMonth #{}:".format(i+1))
     print("Total transactions: {}\n".format(len(transactions[i])))
     print("-------------------------------")
 
