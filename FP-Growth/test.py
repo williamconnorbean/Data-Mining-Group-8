@@ -17,7 +17,7 @@ with open("./test.csv") as database:
 minsup = 3
 
 # mine frequent itemsets using original FP-Growth
-for itemset in find_frequent_itemsets(transactions, minsup):
+for itemset in find_frequent_itemsets(transactions, minsup, "./test.csv", True):
     print itemset
 
 print
