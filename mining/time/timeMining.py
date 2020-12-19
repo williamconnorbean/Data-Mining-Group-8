@@ -1,6 +1,7 @@
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.getcwd()))+'/FP-Growth')
+sys.path.append('../../')
 
 from fp_growth import find_frequent_itemsets
 import csv
@@ -32,7 +33,7 @@ for i in range(NUM_MONTH + 1):
     maxCount = 0
     frequentItem = None
 
-    for itemset, support in find_frequent_itemsets(transactions[i], minsup, True):
+    for itemset, support in find_frequent_itemsets(transactions[i], minsup, "../../data/canada-covid-details-reduced.csv", True, True):
         if len(itemset) == 2 and 'Not Reported' not in itemset:
             if support > maxCount:
                 maxCount = support
