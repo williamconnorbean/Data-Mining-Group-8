@@ -10,13 +10,62 @@ Basic usage of the module is very simple:
 """
 
 from collections import defaultdict, namedtuple
+import csv
+from FPGrowthNew import DBTree
 
 __author__ = "Eric Naeseth <eric@naeseth.com>"
 __copyright__ = "Copyright © 2009 Eric Naeseth"
 __license__ = "MIT License"
 
+def find_frequent_itemsets_1_tdb_scan(dbTree, minimum_support, include_support=False):
+    transactions = DBTree.getPaths(dbTree)
 
-def find_frequent_itemsets(transactions, minimum_support, include_support=False):
+    items = defaultdict(lambda: 0)  # mapping from items to their supports
+
+    # if using support rate instead of support count
+    if 0 < minimum_support <= 1:
+        minimum_support = minimum_support * len(transactions)
+
+    # get support for each item
+    items = dbTree.getSupportCount()
+
+    # Remove infrequent items from the item support dictionary.
+    items = dict(
+        (item, support) for item, support in items.items() if support >= minimum_support
+    )
+
+    # Build our FP-tree. Before any transactions can be added to the tree, they
+    # must be stripped of infrequent items and their surviving items must be
+    # sorted in decreasing order of frequency.
+    def clean_transaction(transaction):
+        transaction = filter(lambda v: v in items, transaction)
+        transaction = sorted(transaction, key=lambda v: items[v], reverse=True)
+        return transaction
+
+    master = FPTree()
+    for transaction in list(map(clean_transaction, transactions)):
+        master.add(transaction)
+
+    def find_with_suffix(tree, suffix):
+        for item, nodes in tree.items():
+            support = sum(n.count for n in nodes)
+            if support >= minimum_support and item not in suffix:
+                # New winner!
+                found_set = [item] + suffix
+                yield (found_set, support) if include_support else found_set
+
+                # Build a conditional tree and recursively search for frequent
+                # itemsets within it.
+                cond_tree = conditional_tree_from_paths(tree.prefix_paths(item))
+                for s in find_with_suffix(cond_tree, found_set):
+                    yield s  # pass along the good news to our caller
+
+    # Search for frequent itemsets, and yield the results we find.
+    for itemset in find_with_suffix(master, []):
+        yield itemset
+
+
+def find_frequent_itemsets(transactions, minimum_support, tdbFile="", useTwoScans=False, include_support=False):
     """
     Find frequent itemsets in the given transactions using FP-growth. This
     function returns a generator instead of an eagerly-populated list of items.
@@ -39,9 +88,15 @@ def find_frequent_itemsets(transactions, minimum_support, include_support=False)
 
     # Load the passed-in transactions and count the support that individual
     # items have.
-    for transaction in transactions:
-        for item in transaction:
-            items[item] += 1
+    if useTwoScans and tdbFile != "":
+        with open(tdbFile) as database:
+            for row in csv.reader(database):
+                for item in row:
+                    items[item] += 1
+    else:
+        for transaction in transactions:
+            for item in transaction:
+                items[item] += 1
 
     # Remove infrequent items from the item support dictionary.
     items = dict(

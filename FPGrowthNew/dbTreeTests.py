@@ -60,15 +60,36 @@ class DBTreeTests(unittest.TestCase):
         self.assertEqual(self.tree.root.children['a'].children['e'].count, 1)
 
     def testGetPaths(self):
-        tdb = [
-            ['a','c','d'],
-            ['b','c','e'],
-            ['a','b','c','e'],
-            ['b','e']
-        ]
+        t1 = ['a','c','d']
+        t2 = ['b','c','e']
+        t3 = ['a','b','c','e']
+        t4 = ['b','e']
 
-        self.tree.buildTree(tdb)
+        self.tree.add(t1)
+        self.tree.add(t2)
+        self.tree.add(t3)
+        self.tree.add(t4)
+
         self.assertIn(['a','c','d'], DBTree.getPaths(self.tree))
         self.assertIn(['b','c','e'], DBTree.getPaths(self.tree))
         self.assertIn(['a','b','c','e'], DBTree.getPaths(self.tree))
         self.assertIn(['b','e'], DBTree.getPaths(self.tree))
+    
+    def testGetSupportCount(self):
+        t1 = ['a','c','d']
+        t2 = ['b','c','e']
+        t3 = ['a','b','c','e']
+        t4 = ['b','e']
+
+        self.tree.add(t1)
+        self.tree.add(t2)
+        self.tree.add(t3)
+        self.tree.add(t4)
+
+        result = self.tree.getSupportCount()
+
+        self.assertEqual(result['a'], 2)
+        self.assertEqual(result['b'], 3)
+        self.assertEqual(result['c'], 3)
+        self.assertEqual(result['d'], 1)
+        self.assertEqual(result['e'], 3)
