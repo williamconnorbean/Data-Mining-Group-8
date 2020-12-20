@@ -21,7 +21,7 @@ with open("../../data/canada-covid-details-reduced.csv") as database:
         transactions[date_time_obj.month-1].append(row[2:4])
         transactions[NUM_MONTH].append(row[2:4])
 
-minsup = 2
+minsup = 0.05
 for i in range(NUM_MONTH + 1):
     if i == 12:
         print("\n\nEntire time range:")
