@@ -86,8 +86,10 @@ def traverse(node, paths, path = []):
         path.append(node.item)
 
     if len(node.children) == 0:
-        temp = path[:]
-        paths.append(temp)
+        for _ in range(node.count):
+            temp = path[:]
+            paths.append(temp)
+        
         path.pop()
     else:
         for child in node.children:
