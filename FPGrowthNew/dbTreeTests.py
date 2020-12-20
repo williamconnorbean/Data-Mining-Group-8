@@ -74,6 +74,26 @@ class DBTreeTests(unittest.TestCase):
         self.assertIn(['b','c','e'], DBTree.getPaths(self.tree))
         self.assertIn(['a','b','c','e'], DBTree.getPaths(self.tree))
         self.assertIn(['b','e'], DBTree.getPaths(self.tree))
+        self.assertEqual(len(DBTree.getPaths(self.tree)), 4)
+    
+    def testGetPathsWithLeafNodeCountGreaterThanOne(self):
+        t1 = ['a','c','d']
+        t2 = ['a','c','d']
+        t3 = ['b','c','e']
+        t4 = ['a','b','c','e']
+        t5 = ['b','e']
+
+        self.tree.add(t1)
+        self.tree.add(t2)
+        self.tree.add(t3)
+        self.tree.add(t4)
+        self.tree.add(t5)
+
+        self.assertIn(['a','c','d'], DBTree.getPaths(self.tree))
+        self.assertIn(['b','c','e'], DBTree.getPaths(self.tree))
+        self.assertIn(['a','b','c','e'], DBTree.getPaths(self.tree))
+        self.assertIn(['b','e'], DBTree.getPaths(self.tree))
+        self.assertEqual(len(DBTree.getPaths(self.tree)), 5)
     
     def testGetSupportCount(self):
         t1 = ['a','c','d']
