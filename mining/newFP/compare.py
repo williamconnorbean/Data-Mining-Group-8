@@ -8,15 +8,17 @@ from FPGrowthNew import DBTree
 import csv
 import time
 
-minsup = 3
-for filename in os.listdir("../../data/differentDB"):
+directory = "../../data/differentDB"
+minsup = 0.1
+for filename in os.listdir(directory):
     if filename.endswith(".csv"): 
         print filename
+        print "-----------------------------------------"
         transactions = []
         start1 = time.time()
 
         # first tdb scan
-        with open("../../data/differentDB/"+filename) as database:
+        with open(directory+"/"+filename) as database:
             for row in csv.reader(database):
                 transactions.append(row)
         print "Num of transaction: %d " %  len(transactions)
@@ -27,7 +29,7 @@ for filename in os.listdir("../../data/differentDB"):
 
         start2 = time.time()
         # mine frequent itemsets using original FP-Growth with second scan
-        for itemset, support in find_frequent_itemsets(transactions, minsup, "../../data/differentDB/"+filename, True, True):
+        for itemset, support in find_frequent_itemsets(transactions, minsup, directory+"/"+filename, True, True):
             pass
 
         end2 = time.time()
@@ -52,4 +54,4 @@ for filename in os.listdir("../../data/differentDB"):
 
         end2 = time.time()
         print "Time for mining without 2nd DB scan : %f " %  (end2 - start2)
-        print "Total time : %f " %  (end2 - start1)
+        print "Total time : %f \n\n" %  (end2 - start1)
