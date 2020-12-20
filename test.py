@@ -14,6 +14,7 @@ def suite():
     suite.addTest(DBTreeTests('testAddIndependentTransactions'))
     suite.addTest(DBTreeTests('testAddCommonPrefixes'))
     suite.addTest(DBTreeTests('testGetPaths'))
+    suite.addTest(DBTreeTests('testGetPathsWithLeafNodeCountGreaterThanOne'))
     suite.addTest(DBTreeTests('testGetSupportCount'))
     return suite
 
