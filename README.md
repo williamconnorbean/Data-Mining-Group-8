@@ -35,3 +35,10 @@ To run *timeMining.py*:
 **NOTE: this python file is using the old FP_growth method to find the result.**
 
 1. *python timeMining.py* will output the total number of transactions and the age-gender group with largest support in percentage for each month and the entire time range mining from the entire database `canada-covid-details-reduced.csv`.
+
+## Unit Tests
+Our modification to the original FP-Growth algorithm comes with a suite of unit tests to ensure code quality. The tests cover the creation of the REP-Tree as well as the functions that each node of the REP-Tree are responsible for.
+
+To execute the unit tests:
+1. Map to the root of the project directory
+2. Run `python test.py`
