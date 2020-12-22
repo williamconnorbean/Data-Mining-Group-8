@@ -1,12 +1,9 @@
 import unittest
-from helpers.helpersTest import HelpersTests
 from FPGrowthNew.dbTreeTests import DBNodeTests
 from FPGrowthNew.dbTreeTests import DBTreeTests
 
 def suite():
     suite = unittest.TestSuite()
-    suite.addTest(HelpersTests('testPreprocess'))
-
     suite.addTest(DBNodeTests('testAdd'))
     suite.addTest(DBNodeTests('testSearchChildren'))
 
